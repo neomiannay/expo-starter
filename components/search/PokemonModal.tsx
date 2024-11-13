@@ -18,7 +18,7 @@ const PokemonModal = ({ visible, close, pokemon }: PokemonModalProps) => {
   };
 
   return (
-    <GestureRecognizer style={{ flex: 1 }} onSwipeDown={close} config={config}>
+    <GestureRecognizer onSwipeDown={close} config={config}>
       <Modal
         animationType="slide"
         visible={visible}

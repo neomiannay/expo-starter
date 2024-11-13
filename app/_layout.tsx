@@ -1,11 +1,13 @@
-import { NavigationContainer } from "@react-navigation/native";
+import { GlobalProvider } from "@/provider/GlobalProvider";
 import { Stack } from "expo-router";
 
 export default function RootLayout() {
   return (
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="+not-found" />
-    </Stack>
+    <GlobalProvider>
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="+not-found" />
+      </Stack>
+    </GlobalProvider>
   );
 }

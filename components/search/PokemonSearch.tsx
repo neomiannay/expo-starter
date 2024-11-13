@@ -1,17 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { View, TextInput, Button, Text, StyleSheet, Image } from "react-native";
 import { fetchPokemonByName } from "@/api/pokemonApi";
 import { useSearchContext } from "@/provider/SearchProvider";
 import SearchList from "./SearchList";
 
 const PokemonSearch = () => {
-  const { pokemonName, setPokemonName, setPokemonData } = useSearchContext();
+  const { isFocused, pokemonName, setPokemonName, setPokemonData } =
+    useSearchContext();
   const [error, setError] = useState("");
+  const inputRef = useRef<TextInput>(null);
+
+  useEffect(() => {
+    console.log("isFocused", isFocused);
+    // console.log("inputRef", inputRef.current);
+
+    if (isFocused && inputRef.current) {
+      // console.log("focus");
+
+      inputRef.current.focus();
+    }
+  }, [isFocused]);
 
   const handleSearch = async () => {
     try {
       console.log(pokemonName);
-
       const data = await fetchPokemonByName(pokemonName);
       if (data.status === 404) {
         throw new Error("Pokémon n'existe pas");
@@ -33,12 +45,13 @@ const PokemonSearch = () => {
           style={{ width: "100%", height: 200 }}
         />
         <TextInput
-          placeholder="Chercher votre prochain Pokémon"
+          ref={inputRef}
+          placeholder="What's that Pokemon ?"
           value={pokemonName}
-          onChangeText={setPokemonName}
           returnKeyType="search"
-          onSubmitEditing={handleSearch}
           autoCorrect={false}
+          onChangeText={setPokemonName}
+          onSubmitEditing={handleSearch}
           style={styles.input}
         />
         <Button title="Rechercher" onPress={handleSearch} />
@@ -52,6 +65,7 @@ const PokemonSearch = () => {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
+    height: "100%",
     flex: 1,
     backgroundColor: "#ffffff",
     alignItems: "center",
