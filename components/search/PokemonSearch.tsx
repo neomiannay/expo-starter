@@ -65,6 +65,7 @@ const PokemonSearch = () => {
           style={styles.input}
         />
         <Button title="Rechercher" onPress={handleSearch} />
+        <Text>Indice: {randomPokemonName}</Text>
       </View>
       {!!error && <Text>{error}</Text>}
       <SearchAnswer />
