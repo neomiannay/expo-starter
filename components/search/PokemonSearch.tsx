@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, TextInput, Button, Text, StyleSheet, Image } from "react-native";
 import { useSearchContext } from "@/provider/SearchProvider";
-import SearchList from "./SearchList";
 import { useGlobalContext } from "@/provider/GlobalProvider";
+import { fetchPokemonCardByName } from "@/api/pokemonTCGApi";
+import SearchAnswer from "./SearchList";
 
 const PokemonSearch = () => {
   const { randomPokemon, randomPokemonName } = useGlobalContext();
@@ -22,9 +23,24 @@ const PokemonSearch = () => {
     }
   }, [isFocused]);
 
+  const fetchCorrectPokemon = async () => {
+    try {
+      const data = await fetchPokemonCardByName(pokemonName);
+
+      if (data.status === 404) {
+        throw new Error("Pokémon non trouvé");
+      } else {
+        setPokemonData(data);
+        setError("");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleSearch = () => {
     if (pokemonName.toLowerCase() === randomPokemonName.toLowerCase()) {
-      setPokemonData(randomPokemon);
+      fetchCorrectPokemon();
     } else {
       setError("Pokémon non trouvé");
       setPokemonData(null);
@@ -51,7 +67,7 @@ const PokemonSearch = () => {
         <Button title="Rechercher" onPress={handleSearch} />
       </View>
       {error && <Text>{error}</Text>}
-      <SearchList />
+      <SearchAnswer />
     </View>
   );
 };

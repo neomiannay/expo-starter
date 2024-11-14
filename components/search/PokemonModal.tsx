@@ -1,16 +1,27 @@
 import { PokemonType } from "@/types/Pokemon";
-import React from "react";
+import React, { useMemo } from "react";
 import { Modal, View, Text, Image, StyleSheet, Button } from "react-native";
 import GestureRecognizer from "react-native-swipe-gestures";
 
 type PokemonModalProps = {
   visible: boolean;
   close: () => void;
-  pokemon: PokemonType | null;
+  pokemons: PokemonType | null;
 };
 
-const PokemonModal = ({ visible, close, pokemon }: PokemonModalProps) => {
-  if (!pokemon) return null;
+const PokemonModal = ({ visible, close, pokemons }: PokemonModalProps) => {
+  if (!pokemons || pokemons.length == 0) return null;
+
+  const pokemon = useMemo(() => {
+    let p = pokemons.reduce((acc, curr) => {
+      if (curr.image) {
+        return curr;
+      }
+      return acc;
+    });
+
+    return p;
+  }, [pokemons]);
 
   const config = {
     velocityThreshold: 0.3,
@@ -27,11 +38,11 @@ const PokemonModal = ({ visible, close, pokemon }: PokemonModalProps) => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Image
-              source={{ uri: pokemon.sprites.regular }}
+              source={{ uri: `${pokemon?.image}/high.png` }}
               style={styles.image}
             />
-            <Text style={styles.name}>{pokemon.name.fr}</Text>
-            <Text style={styles.type}>{pokemon.category}</Text>
+            {/* <Text style={styles.name}>{pokemon.name.fr}</Text> */}
+            {/* <Text style={styles.type}>{pokemon.category}</Text> */}
             <Button title="Fermer" onPress={close} />
           </View>
         </View>
@@ -55,9 +66,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   image: {
-    width: 100,
-    height: 100,
+    width: "100%",
     marginBottom: 10,
+    aspectRatio: 600 / 825,
+    position: "relative",
   },
   name: {
     fontSize: 18,

@@ -2,8 +2,10 @@ import React, { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import PokemonModal from "./PokemonModal";
 import { useSearchContext } from "@/provider/SearchProvider";
+import { useGlobalContext } from "@/provider/GlobalProvider";
 
-const SearchList = () => {
+const SearchAnswer = () => {
+  const { randomizePokemon } = useGlobalContext();
   const { setIsFocused, pokemonData } = useSearchContext();
   const [modalVisible, setModalVisible] = React.useState(false);
 
@@ -14,6 +16,7 @@ const SearchList = () => {
   }, [pokemonData]);
 
   const handleCloseModal = () => {
+    randomizePokemon();
     setModalVisible(false);
     setIsFocused(false);
   };
@@ -23,10 +26,10 @@ const SearchList = () => {
     <PokemonModal
       visible={modalVisible}
       close={handleCloseModal}
-      pokemon={pokemonData}
+      pokemons={pokemonData}
     />
     // </GestureHandlerRootView>
   );
 };
 
-export default SearchList;
+export default SearchAnswer;

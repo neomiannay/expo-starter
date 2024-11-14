@@ -21,6 +21,7 @@ type GlobalContextType = {
   setRandomPokemon: (pokemon: PokemonType | null) => void;
   randomPokemonName: string;
   setRandomPokemonName: (name: string) => void;
+  randomizePokemon: () => void;
 };
 
 export const GlobalContext = createContext<GlobalContextType | null>(null);
@@ -34,9 +35,13 @@ export const GlobalProvider = ({ children }: BaseProviderProps) => {
   const [randomPokemon, setRandomPokemon] = useState<PokemonType | null>(null);
   const [randomPokemonName, setRandomPokemonName] = useState<string>("");
 
-  useEffect(() => {
+  const randomizePokemon = () => {
     const id = Math.floor(Math.random() * 528) + 1;
     setRandomPokeId(id);
+  };
+
+  useEffect(() => {
+    randomizePokemon();
   }, []);
 
   useEffect(() => {
@@ -65,6 +70,7 @@ export const GlobalProvider = ({ children }: BaseProviderProps) => {
         setRandomPokemon,
         randomPokemonName,
         setRandomPokemonName,
+        randomizePokemon,
       }}
     >
       {providers.reverse().reduce(
