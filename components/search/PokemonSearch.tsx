@@ -66,7 +66,7 @@ const PokemonSearch = () => {
         />
         <Button title="Rechercher" onPress={handleSearch} />
       </View>
-      {error && <Text>{error}</Text>}
+      {!!error && <Text>{error}</Text>}
       <SearchAnswer />
     </View>
   );

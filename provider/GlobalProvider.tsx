@@ -9,6 +9,7 @@ import React, {
 import { SearchProvider } from "./SearchProvider";
 import { PokemonType } from "@/types/Pokemon";
 import { fetchPokemon } from "@/api/pokemonApi";
+import { MAX_POKEMON } from "@/core/constants";
 
 export type PanelType = {
   key: string;
@@ -36,7 +37,7 @@ export const GlobalProvider = ({ children }: BaseProviderProps) => {
   const [randomPokemonName, setRandomPokemonName] = useState<string>("");
 
   const randomizePokemon = () => {
-    const id = Math.floor(Math.random() * 528) + 1;
+    const id = Math.floor(Math.random() * MAX_POKEMON) + 1;
     setRandomPokeId(id);
   };
 
