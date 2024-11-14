@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, TextInput, Button, Text, StyleSheet, Image } from "react-native";
-import { fetchPokemonByName } from "@/api/pokemonApi";
+import { fetchPokemonCardByName } from "@/api/pokemonTCGApi";
 import { useSearchContext } from "@/provider/SearchProvider";
 import SearchList from "./SearchList";
 
@@ -24,7 +24,9 @@ const PokemonSearch = () => {
   const handleSearch = async () => {
     try {
       console.log(pokemonName);
-      const data = await fetchPokemonByName(pokemonName);
+      const data = await fetchPokemonCardByName(pokemonName);
+      console.log(data);
+      
       if (data.status === 404) {
         throw new Error("Pokémon n'existe pas");
       } else {

@@ -23,7 +23,7 @@ const SearchList = () => {
     <PokemonModal
       visible={modalVisible}
       close={handleCloseModal}
-      pokemon={pokemonData}
+      pokemons={pokemonData}
     />
     // </GestureHandlerRootView>
   );

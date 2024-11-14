@@ -2,6 +2,7 @@ type PokemonType = {
   pokedex_id: number;
   generation: number;
   category: string;
+  image: string;
   name: {
     fr: string;
     en: string;
@@ -66,6 +67,6 @@ type PokemonType = {
           shiny: string;
         };
       }[];
-};
+}[];
 
 export type { PokemonType };
