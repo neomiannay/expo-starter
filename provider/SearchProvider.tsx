@@ -1,3 +1,4 @@
+import { PokemonType } from "@/types/Pokemon";
 import { ReactNode, createContext, useContext, useState } from "react";
 
 type SearchContextType = {
@@ -5,8 +6,8 @@ type SearchContextType = {
   setIsFocused: (isFocused: boolean) => void;
   pokemonName: string;
   setPokemonName: (name: string) => void;
-  pokemonData: any;
-  setPokemonData: (data: any) => void;
+  pokemonData: PokemonType | null;
+  setPokemonData: (data: PokemonType | null) => void;
 };
 
 export const SearchContext = createContext<SearchContextType>(
@@ -16,7 +17,7 @@ export const SearchContext = createContext<SearchContextType>(
 export const SearchProvider = ({ children }: { children: ReactNode }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [pokemonName, setPokemonName] = useState("");
-  const [pokemonData, setPokemonData] = useState<any>(null);
+  const [pokemonData, setPokemonData] = useState<PokemonType | null>(null);
 
   return (
     <SearchContext.Provider

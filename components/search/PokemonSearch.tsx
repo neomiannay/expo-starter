@@ -1,37 +1,31 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, TextInput, Button, Text, StyleSheet, Image } from "react-native";
-import { fetchPokemonByName } from "@/api/pokemonApi";
 import { useSearchContext } from "@/provider/SearchProvider";
 import SearchList from "./SearchList";
+import { useGlobalContext } from "@/provider/GlobalProvider";
 
 const PokemonSearch = () => {
+  const { randomPokemon, randomPokemonName } = useGlobalContext();
   const { isFocused, pokemonName, setPokemonName, setPokemonData } =
     useSearchContext();
   const [error, setError] = useState("");
   const inputRef = useRef<TextInput>(null);
 
   useEffect(() => {
-    console.log("isFocused", isFocused);
-    // console.log("inputRef", inputRef.current);
+    console.log("randomPokemon", randomPokemon);
+    console.log("randomPokemonName", randomPokemonName);
+  }, [randomPokemon]);
 
+  useEffect(() => {
     if (isFocused && inputRef.current) {
-      // console.log("focus");
-
       inputRef.current.focus();
     }
   }, [isFocused]);
 
-  const handleSearch = async () => {
-    try {
-      console.log(pokemonName);
-      const data = await fetchPokemonByName(pokemonName);
-      if (data.status === 404) {
-        throw new Error("Pokémon n'existe pas");
-      } else {
-        setPokemonData(data);
-        setError("");
-      }
-    } catch (err) {
+  const handleSearch = () => {
+    if (pokemonName.toLowerCase() === randomPokemonName.toLowerCase()) {
+      setPokemonData(randomPokemon);
+    } else {
       setError("Pokémon non trouvé");
       setPokemonData(null);
     }
