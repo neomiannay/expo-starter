@@ -34,10 +34,7 @@ export default function Card({ imageUrl }: CardProps) {
         toValue: newRotationY,
         duration: 100,
         useNativeDriver: true,
-      }).start();
-
-      console.log(rotationX, rotationY);
-      
+      }).start();      
     });
 
     // Cleanup listener on component unmount
