@@ -10,6 +10,7 @@ import { SearchProvider } from "./SearchProvider";
 import { PokemonType } from "@/types/Pokemon";
 import { fetchPokemon } from "@/api/pokemonApi";
 import { MAX_POKEMON } from "@/core/constants";
+import { AsyncStorageProvider } from "./AsyncStorageProvider";
 
 export type PanelType = {
   key: string;
@@ -61,7 +62,7 @@ export const GlobalProvider = ({ children }: BaseProviderProps) => {
     }
   }, [randomPokeId]);
 
-  const providers = [SearchProvider];
+  const providers = [SearchProvider, AsyncStorageProvider];
   return (
     <GlobalContext.Provider
       value={{

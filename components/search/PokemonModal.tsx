@@ -1,6 +1,14 @@
 import { PokemonType } from "@/types/Pokemon";
-import React, { useEffect, useMemo, useState } from "react";
-import { Modal, View, Text, Image, StyleSheet, Button, EventSubscription, Pressable } from "react-native";
+import React, { useMemo } from "react";
+import {
+  Modal,
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Button,
+  Pressable,
+} from "react-native";
 import GestureRecognizer from "react-native-swipe-gestures";
 import ParallaxScrollView from "../ParallaxScrollView";
 import Card from "../Card";
@@ -14,8 +22,8 @@ type PokemonModalProps = {
 
 const PokemonModal = ({ visible, close, pokemons }: PokemonModalProps) => {
   if (!pokemons || pokemons.length == 0) return null;
-  const { randomPokemon } = useGlobalContext(); 
-  
+  const { randomPokemon } = useGlobalContext();
+
   const imageUri = useMemo(() => {
     return randomPokemon?.sprites?.regular;
   }, [randomPokemon]);
@@ -39,51 +47,71 @@ const PokemonModal = ({ visible, close, pokemons }: PokemonModalProps) => {
   return (
     <GestureRecognizer config={config}>
       <Modal
-      animationType="slide"
-      visible={visible}
-      presentationStyle="pageSheet"
-      style={{backgroundColor: 'red'}}
-    >
-      <ParallaxScrollView
-      headerImage={
-        <Card imageUrl={`${pokemon?.image}/high.png`} />
-      }
-      headerBackgroundColor={{ dark: "#883a3a", light: "#c7bebe" }}
+        animationType="slide"
+        visible={visible}
+        presentationStyle="pageSheet"
+        style={{ backgroundColor: "red" }}
       >
-        <View style={styles.modalContentHeader}>
-          <View style={styles.topBar} />
-          <Pressable 
-          style={[styles.button]}
-          onPress={close}>
-            <Text style={styles.text}>Fermer</Text>
-          </Pressable>
-        </View>
-        <View style={styles.modalContent}>
-          <Text style={styles.name}>{randomPokemon?.name.fr}</Text>
-          <View style={{ flexDirection: "row", justifyContent: "center", gap: 10 }}>
-            <Text style={styles.subtitle}>{randomPokemon?.name.en}</Text>
-            <Text style={styles.subtitle}>/</Text>
-            <Text style={styles.subtitle}>{randomPokemon?.name.jp}</Text>
+        <ParallaxScrollView
+          headerImage={<Card imageUrl={`${pokemon?.image}/high.png`} />}
+          headerBackgroundColor={{ dark: "#883a3a", light: "#c7bebe" }}
+        >
+          <View style={styles.modalContentHeader}>
+            <View style={styles.topBar} />
+            <Pressable style={[styles.button]} onPress={close}>
+              <Text style={styles.text}>Fermer</Text>
+            </Pressable>
           </View>
-          <View style={{ flexDirection: "row", justifyContent: "center", gap: 10 }}>
-            {randomPokemon?.types.map((type) => (
-              <Image
-              key={type.name}
-              source={{ uri: type.image }}
-              style={{ width: 20, height: 20, borderRadius: 50, marginTop: 5 }}
-            />
-            ))}
+          <View style={styles.modalContent}>
+            <Text style={styles.name}>{randomPokemon?.name.fr}</Text>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                gap: 10,
+              }}
+            >
+              <Text style={styles.subtitle}>{randomPokemon?.name.en}</Text>
+              <Text style={styles.subtitle}>/</Text>
+              <Text style={styles.subtitle}>{randomPokemon?.name.jp}</Text>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                gap: 10,
+              }}
+            >
+              {randomPokemon?.types.map((type) => (
+                <Image
+                  key={type.name}
+                  source={{ uri: type.image }}
+                  style={{
+                    width: 20,
+                    height: 20,
+                    borderRadius: 50,
+                    marginTop: 5,
+                  }}
+                />
+              ))}
+            </View>
+            <Image source={{ uri: imageUri }} style={styles.image} />
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                gap: 10,
+              }}
+            >
+              <Text style={styles.subtitle}>
+                Génération: {randomPokemon?.generation}
+              </Text>
+              <Text style={styles.subtitle}>
+                Catégorie: {randomPokemon?.category}
+              </Text>
+            </View>
           </View>
-          <Image
-            source={{ uri: imageUri }}
-            style={styles.image}
-          />
-          <View style={{ flexDirection: "row", justifyContent: "space-between", gap: 10 }}>
-            <Text style={styles.subtitle}>Génération: {randomPokemon?.generation}</Text>
-            <Text style={styles.subtitle}>Catégorie: {randomPokemon?.category}</Text>
-          </View>
-        </View>
-      </ParallaxScrollView>
+        </ParallaxScrollView>
       </Modal>
     </GestureRecognizer>
   );
@@ -98,13 +126,13 @@ const styles = StyleSheet.create({
   },
   modalContentHeader: {
     position: "absolute",
-    width: '100%',
+    width: "100%",
     paddingTop: 20,
     paddingBottom: 10,
     backgroundColor: "#fff4f4",
     alignItems: "center",
-    shadowColor: '#171717',
-    shadowOffset: {width: 2, height: 10},
+    shadowColor: "#171717",
+    shadowOffset: { width: 2, height: 10 },
     shadowOpacity: 0.1,
     shadowRadius: 3,
   },
@@ -122,7 +150,6 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 20,
     marginTop: 100,
-
   },
   image: {
     width: "100%",

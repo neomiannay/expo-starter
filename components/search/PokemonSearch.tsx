@@ -21,13 +21,17 @@ import Animated, {
 } from "react-native-reanimated";
 import { Audio } from "expo-av";
 import { Sound } from "expo-av/build/Audio";
+import { Link } from "expo-router";
+import { useAsyncStorageContext } from "@/provider/AsyncStorageProvider";
 
 const WhosThatPokemonImg = require("../../assets/images/whos-that-pokemon.png");
+const PokedexImg = require("../../assets/images/pokedex-icon.png");
 
 const PokemonSearch = () => {
   const { randomPokemon, randomPokemonName } = useGlobalContext();
   const { isFocused, pokemonName, setPokemonName, setPokemonData } =
     useSearchContext();
+  const { storePokemonIds, getPokemonIds } = useAsyncStorageContext();
   const [error, setError] = useState("");
   const [sound, setSound] = useState<Sound | null>(null);
 
@@ -79,6 +83,9 @@ const PokemonSearch = () => {
 
   const fetchCorrectPokemon = async () => {
     try {
+      const pokemonId = randomPokemon?.pokedex_id;
+      console.log(pokemonId);
+
       const data = await fetchPokemonCardByName(pokemonName.trim());
 
       if (data.status === 404) {
@@ -86,6 +93,12 @@ const PokemonSearch = () => {
       } else {
         setPokemonData(data);
         setError("");
+
+        if (pokemonId) {
+          const existingIds = await getPokemonIds();
+          const updatedIds = [...existingIds, pokemonId];
+          await storePokemonIds(updatedIds);
+        }
       }
     } catch (error) {
       console.error(error);
@@ -94,6 +107,8 @@ const PokemonSearch = () => {
 
   const handleSearch = () => {
     const trimmedPokemonName = pokemonName.trim();
+
+    console.log(randomPokemon);
 
     if (trimmedPokemonName.toLowerCase() === randomPokemonName.toLowerCase()) {
       fetchCorrectPokemon();
@@ -128,6 +143,9 @@ const PokemonSearch = () => {
 
   return (
     <LinearGradient colors={["#ff0000", "#ffcc00"]} style={styles.container}>
+      <Link style={styles.link} href={"/pokedex"}>
+        <Image source={PokedexImg} style={styles.pokedex} />
+      </Link>
       <View
         style={styles.searchWrapper}
         onTouchStart={() => Keyboard.dismiss()}
@@ -186,6 +204,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  link: {
+    position: "absolute",
+    top: 60,
+    right: 0,
+    width: 70,
+    height: 70,
+    zIndex: 1,
+  },
+  pokedex: {
+    position: "absolute",
+    top: 60,
+    right: 0,
+    width: 70,
+    height: 70,
+
+    // aspectRatio: 1.5,
+    zIndex: 1,
+  },
   searchWrapper: {
     position: "relative",
     width: "100%",
@@ -208,6 +244,7 @@ const styles = StyleSheet.create({
     aspectRatio: 4 / 3,
     backgroundSize: "contain",
     marginTop: "100%",
+    marginBottom: 20,
   },
   pokemonDefault: {
     position: "absolute",
