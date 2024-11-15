@@ -3,6 +3,7 @@ export interface PokemonType {
   generation: number;
   category: string;
   image: string;
+  length: number;
   name: {
     fr: string;
     en: string;
@@ -67,5 +68,4 @@ export interface PokemonType {
           shiny: string;
         };
       }[];
-}
-[];
+}[];

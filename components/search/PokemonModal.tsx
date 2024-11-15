@@ -3,9 +3,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Modal, View, Text, Image, StyleSheet, Button, EventSubscription, Pressable } from "react-native";
 import GestureRecognizer from "react-native-swipe-gestures";
 import ParallaxScrollView from "../ParallaxScrollView";
-import { Gyroscope } from 'expo-sensors';
-import { Subscription } from "expo-sensors/build/Pedometer";
 import Card from "../Card";
+import { useGlobalContext } from "@/provider/GlobalProvider";
 
 type PokemonModalProps = {
   visible: boolean;
@@ -15,6 +14,11 @@ type PokemonModalProps = {
 
 const PokemonModal = ({ visible, close, pokemons }: PokemonModalProps) => {
   if (!pokemons || pokemons.length == 0) return null;
+  const { randomPokemon } = useGlobalContext(); 
+  
+  const imageUri = useMemo(() => {
+    return randomPokemon?.sprites?.regular;
+  }, [randomPokemon]);
 
   const pokemon = useMemo(() => {
     let p = pokemons.reduce((acc, curr) => {
@@ -33,7 +37,7 @@ const PokemonModal = ({ visible, close, pokemons }: PokemonModalProps) => {
   };
 
   return (
-    <GestureRecognizer onSwipeDown={close} config={config}>
+    <GestureRecognizer config={config}>
       <Modal
       animationType="slide"
       visible={visible}
@@ -44,18 +48,41 @@ const PokemonModal = ({ visible, close, pokemons }: PokemonModalProps) => {
       headerImage={
         <Card imageUrl={`${pokemon?.image}/high.png`} />
       }
-      headerBackgroundColor={{ dark: "#883a3a", light: "#FFFFFF" }}
+      headerBackgroundColor={{ dark: "#883a3a", light: "#c7bebe" }}
       >
-        <View style={styles.topBar} />
-        <Pressable 
-        style={[styles.button]}
-        onPress={close}>
-          <Text style={styles.text}>Fermer</Text>
-        </Pressable>
-        <Image
-          source={{ uri: `${pokemon?.image}/high.png` }}
-          style={styles.image}
-        />
+        <View style={styles.modalContentHeader}>
+          <View style={styles.topBar} />
+          <Pressable 
+          style={[styles.button]}
+          onPress={close}>
+            <Text style={styles.text}>Fermer</Text>
+          </Pressable>
+        </View>
+        <View style={styles.modalContent}>
+          <Text style={styles.name}>{randomPokemon?.name.fr}</Text>
+          <View style={{ flexDirection: "row", justifyContent: "center", gap: 10 }}>
+            <Text style={styles.subtitle}>{randomPokemon?.name.en}</Text>
+            <Text style={styles.subtitle}>/</Text>
+            <Text style={styles.subtitle}>{randomPokemon?.name.jp}</Text>
+          </View>
+          <View style={{ flexDirection: "row", justifyContent: "center", gap: 10 }}>
+            {randomPokemon?.types.map((type) => (
+              <Image
+              key={type.name}
+              source={{ uri: type.image }}
+              style={{ width: 20, height: 20, borderRadius: 50, marginTop: 5 }}
+            />
+            ))}
+          </View>
+          <Image
+            source={{ uri: imageUri }}
+            style={styles.image}
+          />
+          <View style={{ flexDirection: "row", justifyContent: "space-between", gap: 10 }}>
+            <Text style={styles.subtitle}>Génération: {randomPokemon?.generation}</Text>
+            <Text style={styles.subtitle}>Catégorie: {randomPokemon?.category}</Text>
+          </View>
+        </View>
       </ParallaxScrollView>
       </Modal>
     </GestureRecognizer>
@@ -69,12 +96,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "rgb(250, 156, 156)",
   },
-  modalContent: {
-    width: 300,
-    padding: 20,
-    backgroundColor: "white",
-    borderRadius: 10,
+  modalContentHeader: {
+    position: "absolute",
+    width: '100%',
+    paddingTop: 20,
+    paddingBottom: 10,
+    backgroundColor: "#fff4f4",
     alignItems: "center",
+    shadowColor: '#171717',
+    shadowOffset: {width: 2, height: 10},
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
   },
   topBar: {
     width: 50,
@@ -85,34 +117,45 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 10,
   },
+  modalContent: {
+    position: "relative",
+    width: "100%",
+    padding: 20,
+    marginTop: 100,
+
+  },
   image: {
     width: "100%",
+    aspectRatio: 512 / 512,
     marginBottom: 10,
-    aspectRatio: 600 / 825,
     position: "relative",
   },
   name: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: "bold",
+    textAlign: "center",
   },
+  subtitle: {},
   type: {
     fontSize: 14,
     color: "#555",
   },
   text: {
     fontSize: 18,
-    color: "#ccc",
+    color: "#bdbbbb",
   },
   button: {
     position: "relative",
     zIndex: 100,
     padding: 10,
     borderWidth: 2,
-    borderColor: "#ccc",
+    borderColor: "#bdbbbb",
     borderRadius: 5,
     height: 45,
     alignItems: "center",
     alignSelf: "center",
+    boxSizing: "border-box",
+    marginTop: 5,
   },
 });
 

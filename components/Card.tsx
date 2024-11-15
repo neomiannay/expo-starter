@@ -4,7 +4,7 @@ import { StyleSheet, View, Animated, Text } from "react-native";
 import { DeviceMotion } from "expo-sensors";
 
 type CardProps = {
-  imageUrl: string;
+  imageUrl: string | null;
 };
 
 export default function Card({ imageUrl }: CardProps) {
