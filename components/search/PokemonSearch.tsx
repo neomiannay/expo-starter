@@ -166,6 +166,7 @@ const PokemonSearch = () => {
             onChangeText={setPokemonName}
             onSubmitEditing={handleSearch}
             style={styles.input}
+            onTouchStart={(e) => e.stopPropagation()}
           />
           <Text>Indice: {randomPokemonName}</Text>
         </View>
