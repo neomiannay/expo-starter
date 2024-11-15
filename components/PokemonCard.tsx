@@ -5,11 +5,17 @@ type PokemonCardProps = {
   name: string;
   type: string;
   sprite: string;
+  style?: any;
 };
 
-const PokemonCard: React.FC<PokemonCardProps> = ({ name, type, sprite }) => {
+const PokemonCard: React.FC<PokemonCardProps> = ({
+  name,
+  type,
+  sprite,
+  style,
+}) => {
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, style]}>
       <Image source={{ uri: sprite }} style={styles.image} />
       <Text style={styles.name}>{name}</Text>
       <Text style={styles.type}>{type}</Text>

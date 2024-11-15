@@ -1,11 +1,7 @@
 import { PokemonType } from "@/types/Pokemon";
-import React, { useEffect, useMemo, useState } from "react";
-import { Modal, View, Text, Image, StyleSheet, Button, EventSubscription, Pressable } from "react-native";
+import React, { useMemo } from "react";
+import { Modal, View, Text, Image, StyleSheet, Button } from "react-native";
 import GestureRecognizer from "react-native-swipe-gestures";
-import ParallaxScrollView from "../ParallaxScrollView";
-import { Gyroscope } from 'expo-sensors';
-import { Subscription } from "expo-sensors/build/Pedometer";
-import Card from "../Card";
 
 type PokemonModalProps = {
   visible: boolean;
@@ -35,28 +31,21 @@ const PokemonModal = ({ visible, close, pokemons }: PokemonModalProps) => {
   return (
     <GestureRecognizer onSwipeDown={close} config={config}>
       <Modal
-      animationType="slide"
-      visible={visible}
-      presentationStyle="pageSheet"
-      style={{backgroundColor: 'red'}}
-    >
-      <ParallaxScrollView
-      headerImage={
-        <Card imageUrl={`${pokemon?.image}/high.png`} />
-      }
-      headerBackgroundColor={{ dark: "#883a3a", light: "#FFFFFF" }}
+        animationType="slide"
+        visible={visible}
+        presentationStyle="pageSheet"
       >
-        <View style={styles.topBar} />
-        <Pressable 
-        style={[styles.button]}
-        onPress={close}>
-          <Text style={styles.text}>Fermer</Text>
-        </Pressable>
-        <Image
-          source={{ uri: `${pokemon?.image}/high.png` }}
-          style={styles.image}
-        />
-      </ParallaxScrollView>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Image
+              source={{ uri: `${pokemon?.image}/high.png` }}
+              style={styles.image}
+            />
+            {/* <Text style={styles.name}>{pokemon.name.fr}</Text> */}
+            {/* <Text style={styles.type}>{pokemon.category}</Text> */}
+            <Button title="Fermer" onPress={close} />
+          </View>
+        </View>
       </Modal>
     </GestureRecognizer>
   );
@@ -76,15 +65,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
   },
-  topBar: {
-    width: 50,
-    height: 5,
-    backgroundColor: "#ccc",
-    borderRadius: 5,
-    alignSelf: "center",
-    position: "absolute",
-    top: 10,
-  },
   image: {
     width: "100%",
     marginBottom: 10,
@@ -98,21 +78,6 @@ const styles = StyleSheet.create({
   type: {
     fontSize: 14,
     color: "#555",
-  },
-  text: {
-    fontSize: 18,
-    color: "#ccc",
-  },
-  button: {
-    position: "relative",
-    zIndex: 100,
-    padding: 10,
-    borderWidth: 2,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    height: 45,
-    alignItems: "center",
-    alignSelf: "center",
   },
 });
 
