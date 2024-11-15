@@ -1,4 +1,4 @@
-type PokemonType = {
+export interface PokemonType {
   pokedex_id: number;
   generation: number;
   category: string;
@@ -67,6 +67,5 @@ type PokemonType = {
           shiny: string;
         };
       }[];
-}[];
-
-export type { PokemonType };
+}
+[];
