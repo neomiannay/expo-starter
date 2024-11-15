@@ -186,7 +186,7 @@ const PokemonSearch = () => {
             style={styles.input}
             onTouchStart={(e) => e.stopPropagation()}
           />
-          <Text>Indice: {randomPokemonName}</Text>
+          {/* <Text>Indice: {randomPokemonName}</Text> */}
         </View>
         {!!error && <Text>{error}</Text>}
       </View>
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
   inputWrapper: {
     position: "absolute",
     left: 0,
-    bottom: "35%",
+    bottom: "40%",
     width: "100%",
     display: "flex",
     justifyContent: "space-between",
